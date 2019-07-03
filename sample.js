@@ -1,8 +1,8 @@
-// function getUser(id) {
-//   return {
-//     id,
-//     email: `user${id}@test.com`
-//   };
-// }
+function getUser(id) {
+  return {
+    id,
+    email: `user${id}@test.com`
+  };
+}
 
-// module.exports = getUser;
+module.exports = getUser;
