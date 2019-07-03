@@ -1,0 +1,22 @@
+{
+  "name": "js_calculator",
+  "version": "1.0.0",
+  "description": "This is JS Calculator by TDD",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Junkim93/js_calculator.git"
+  },
+  "author": "Jun",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Junkim93/js_calculator/issues"
+  },
+  "homepage": "https://github.com/Junkim93/js_calculator#readme",
+  "devDependencies": {
+    "jest": "^24.8.0"
+  }
+}
