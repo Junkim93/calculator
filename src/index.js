@@ -1,4 +1,5 @@
 const output = document.getElementById("output");
+const result = document.getElementById("result");
 const arrValues = [];
 
 // 버튼 입력 값을 읽고 배열에 저장합니다.
@@ -7,7 +8,8 @@ const readValue = event => {
   const value = event.target.innerHTML;
   arrValues.push(value);
   displayValue(value);
-  // console.log(arrValues); v
+  checkBracket(value);
+  console.log(arrValues);
 };
 
 const displayValue = value => {
@@ -44,7 +46,7 @@ const changeTypeToNumber = value => {
 };
 
 // 연산자, 현재 값, 다음 값을 입력받아 해당 연산자에 맞게 계산합니다.
-const calculateValues = (op, currentNum, nextNum) => {
+const calculateValues = (currentNum, op, nextNum) => {
   let ret = currentNum;
   switch (op) {
     case "+":
@@ -71,12 +73,33 @@ const initValues = () => {
 };
 
 const accumulateValues = value => {
-  arrValues.pop(); // "=" 기호를 제거합니다.
+  arrValues.pop();
   arrValues.push(value);
 };
 
 // 배열의 길이가 1인지 'true' or 'false'로 체크합니다.
 const checkArrValues = () => arrValues.length === 1;
+
+// 배열에 괄호가 있는지 확인합니다.
+const checkBracket = () => {
+  return arrValues.indexOf("(") !== -1 && arrValues.indexOf(")") !== -1;
+};
+
+// 괄호 부분을 따로 분리합니다.
+const spliceBracket = arr => {
+  const openBracket = arrValues.indexOf("(");
+  const closeBracket = arrValues.indexOf(")");
+  console.log(openBracket, closeBracket);
+  return arr.slice(openBracket, closeBracket + 1);
+};
+
+// 괄호를 제거합니다.
+const removeBracket = spliceBracketValues => {
+  spliceBracketValues.shift();
+  const closeBracket = spliceBracketValues.indexOf(")");
+  spliceBracketValues.splice(closeBracket, 1);
+  return spliceBracketValues;
+};
 
 // 배열을 연산자 기준으로 분리 후 다시 합쳐 데이터 형식을 숫자로 바꿉니다.
 const numValueLoop = () => {
@@ -89,18 +112,34 @@ const numValueLoop = () => {
   return currentNum;
 };
 
-//
-const action = () => {
-  let currentNum = numValueLoop();
-  // console.log(currentNum); v
+const priorityValueLoop = () => {
+  const splice = spliceBracket(arrValues);
+  // console.log(splice);
+  const strNumber = removeBracket(splice);
+  // console.log(strNumber);
+  const join = joinValues(strNumber);
+  // console.log(join);
+  const currentNum = changeTypeToNumber(join);
+  return currentNum;
+};
 
+const returnNum = () => {
+  return checkBracket() ? priorityValueLoop() : numValueLoop();
+};
+
+const runCalculationLoop = num => {
   while (!checkArrValues()) {
     const op = arrValues.shift();
-    // console.log(op); v
     const nextNum = numValueLoop();
-    // console.log(nextNum); v
-    currentNum = calculateValues(op, currentNum, nextNum);
+    num = calculateValues(num, op, nextNum);
   }
+  return num;
+};
+
+// 로직 실행
+const action = () => {
+  let currentNum = numValueLoop();
+  currentNum = runCalculationLoop(currentNum);
   accumulateValues(currentNum);
   return currentNum;
 };
@@ -110,4 +149,33 @@ const execLogic = event => {
   const value = event.target.innerHTML;
   arrValues.push(value);
   output.innerHTML = action();
+  result.innerHTML = `Ans = ${output.innerHTML}`;
 };
+
+// const checkBracket = value => {
+//   if (value === "(" || value === ")") console.log("Find bracket");
+// };
+
+// const checkOperator = value => {
+//   if (value === "+" || value === "-" || value === "/" || value === "X") {
+//     return value;
+//   }
+// };
+
+// const blockInputOperator = value => {
+
+// }
+
+// 결과값이 있는 상태에서 숫자를 입력하면 입력값이 초기화됨
+// const checkInputValue = () => {
+//   if (output.innerHTML !== 0) {
+
+//   }
+// };
+
+// () 체크하면 체크한 범위 먼저 잘라내서 계산
+// const testCode = () => {
+//   const openBracket = arrValues.indexOf("(");
+//   const closeBracket = arrValues.indexOf(")");
+//   console.log(a, b);
+// };
