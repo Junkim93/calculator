@@ -1,22 +1,34 @@
 const output = document.getElementById("output");
 const result = document.getElementById("result");
+const clear = document.getElementById("clear");
 const arrValues = [];
 
 // 버튼 입력 값을 읽고 배열에 저장합니다.
 const readValue = event => {
   // console.log(event.target.innerHTML); v
   const value = event.target.innerHTML;
-  arrValues.push(value);
-  displayValue(value);
-  checkBracket(value);
+  if (value === "CE") {
+    arrValues.pop();
+    displayValue();
+  } else if (value === "AC") {
+    clearAll();
+    clear.innerHTML = "CE";
+  } else {
+    arrValues.push(value);
+    displayValue();
+  }
   console.log(arrValues);
 };
 
-const displayValue = value => {
-  if (output.innerHTML === "0") {
-    return (output.innerHTML = value);
+// output의 innerHTML 값을 배열을 누산한 값으로 리턴합니다.
+const displayValue = () => {
+  if (arrValues.length === 0) {
+    output.innerHTML = 0;
+  } else {
+    output.innerHTML = arrValues.reduce((prev, curr) => {
+      return prev + curr;
+    });
   }
-  output.innerHTML += value;
 };
 
 // 저장된 배열을 연산자를 기준으로 분리합니다.
@@ -65,7 +77,7 @@ const calculateValues = (currentNum, op, nextNum) => {
   return ret;
 };
 
-const initValues = () => {
+const clearAll = () => {
   if (arrValues.length !== 0) {
     while (arrValues.length !== 0) arrValues.pop();
   }
@@ -150,32 +162,5 @@ const execLogic = event => {
   arrValues.push(value);
   output.innerHTML = action();
   result.innerHTML = `Ans = ${output.innerHTML}`;
+  clear.innerHTML = "AC";
 };
-
-// const checkBracket = value => {
-//   if (value === "(" || value === ")") console.log("Find bracket");
-// };
-
-// const checkOperator = value => {
-//   if (value === "+" || value === "-" || value === "/" || value === "X") {
-//     return value;
-//   }
-// };
-
-// const blockInputOperator = value => {
-
-// }
-
-// 결과값이 있는 상태에서 숫자를 입력하면 입력값이 초기화됨
-// const checkInputValue = () => {
-//   if (output.innerHTML !== 0) {
-
-//   }
-// };
-
-// () 체크하면 체크한 범위 먼저 잘라내서 계산
-// const testCode = () => {
-//   const openBracket = arrValues.indexOf("(");
-//   const closeBracket = arrValues.indexOf(")");
-//   console.log(a, b);
-// };
